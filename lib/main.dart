@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:meal_app/screens/category_screen.dart';
+import 'package:meal_app/screens/meal_detail.dart';
+import 'package:meal_app/widget/meal_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,31 +13,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Meal App',
+      debugShowCheckedModeBanner: false,
+      // home: CategoryScreen(),
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Colors.pink,
+        accentColor: Colors.yellow,
+        canvasColor: Color.fromRGBO(22, 39, 49, 1),
+        fontFamily: 'Raleway',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              subtitle1: TextStyle(
+                fontFamily: "Roboto",
+                fontSize: 24,
+              ),
+            ),
       ),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Home Page',
-        ),
-      ),
+      routes: {
+        '/': (ctx) => CategoryScreen(),
+        CatMealScreen.routeNames: (ctx) => CatMealScreen(),
+        MealDetailScreen.routeNames: (context) => MealDetailScreen()
+      },
     );
   }
 }
