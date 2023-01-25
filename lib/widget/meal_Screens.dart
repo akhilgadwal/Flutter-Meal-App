@@ -20,7 +20,10 @@ class MealScreen extends StatelessWidget {
   final Complexity complexity;
 
   void selectCategory(BuildContext context) {
-    Navigator.of(context).pushNamed(MealDetailScreen.routeNames, arguments: id);
+    Navigator.of(context).pushNamed(
+      MealDetailScreen.routeNames,
+      arguments: id,
+    );
   }
 
   String get ComplexityText {
@@ -50,7 +53,7 @@ class MealScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => selectCategory,
+      onTap: () => selectCategory(context),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
