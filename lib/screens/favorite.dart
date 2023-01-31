@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:meal_app/models/meal_data.dart';
 
 class FavoriteScreen extends StatelessWidget {
-  const FavoriteScreen({super.key});
+  final List<MealData> favMeal;
+
+  FavoriteScreen(this.favMeal);
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Favorite'),
+      child: Text('you not have Favorite Meal'),
     );
   }
 }

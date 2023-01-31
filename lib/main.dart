@@ -1,15 +1,70 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:meal_app/Dummydata/dummy_data.dart';
+import 'package:meal_app/models/meal_data.dart';
 import 'package:meal_app/screens/category_screen.dart';
+import 'package:meal_app/screens/filter_screen.dart';
 import 'package:meal_app/screens/meal_detail.dart';
 import 'package:meal_app/screens/meal_screen.dart';
 import 'package:meal_app/screens/tabs_Screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Map<String, bool> _filters = {
+    'Gluten': false,
+    'lactos': false,
+    'vegan': false,
+    'vegetarian': false,
+  };
+  List<MealData> _availableMeals = Dummy_Meals;
+  //for fav meal data
+  List<MealData> _favoriteMeals = Dummy_Meals;
+
+  void _selectFilters(Map<String, bool> filterData) {
+    setState(() {
+      _filters = filterData;
+      _availableMeals = Dummy_Meals.where((meal) {
+        if (_filters['Gluten']! && !meal.isglutenfree) {
+          return false;
+        }
+        if (_filters['lactos']! && !meal.isLactosefree) {
+          return false;
+        }
+        if (_filters['vegan']! && !meal.isvegan) {
+          return false;
+        }
+        if (_filters['vegetarian']! && !meal.isVegetarian) {
+          return false;
+        }
+        return true;
+      }).toList();
+    });
+  }
+
+  //creating function for fav-meals
+  void _selectFavMeals(String mealId) {
+    final exstingMeals = _favoriteMeals.indexWhere((meal) => meal.id == mealId);
+    if (exstingMeals >= 0) {
+      setState(() {
+        _favoriteMeals.removeAt(exstingMeals);
+      });
+    } else {
+      setState(() {
+        _favoriteMeals.add(Dummy_Meals.firstWhere((meal) => meal.id == mealId));
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +74,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.pink,
         accentColor: Colors.yellow,
-        canvasColor: Color.fromRGBO(22, 39, 49, 1),
+        canvasColor: Color.fromARGB(255, 220, 223, 150),
         fontFamily: 'Raleway',
         textTheme: ThemeData.light().textTheme.copyWith(
               subtitle1: TextStyle(
@@ -28,10 +83,13 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
+      initialRoute: '/',
       routes: {
-        '/': (ctx) => TabsScreen(),
-        CatMealScreen.routeNames: (ctx) => CatMealScreen(),
-        MealDetailScreen.routeNames: (context) => MealDetailScreen()
+        '/': (ctx) => TabsScreen(_favoriteMeals),
+        CatMealScreen.routeNames: (ctx) => CatMealScreen(_availableMeals),
+        MealDetailScreen.routeNames: (context) => MealDetailScreen(),
+        FilterScreen.routeNames: (context) =>
+            FilterScreen(_filters, _selectFilters),
       },
     );
   }

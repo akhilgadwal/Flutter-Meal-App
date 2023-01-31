@@ -4,26 +4,34 @@ import 'package:meal_app/models/meal_data.dart';
 import '../screens/meal_detail.dart';
 
 class MealScreen extends StatelessWidget {
-  const MealScreen(
+  MealScreen(
       {super.key,
       required this.id,
       required this.title,
       required this.imageUrl,
       required this.durations,
       required this.affordability,
-      required this.complexity});
+      required this.complexity,
+      required this.removeItem});
   final String id;
   final String title;
   final String imageUrl;
   final int durations;
   final Affordability affordability;
   final Complexity complexity;
+  final Function removeItem;
 
   void selectCategory(BuildContext context) {
-    Navigator.of(context).pushNamed(
+    Navigator.of(context)
+        .pushNamed(
       MealDetailScreen.routeNames,
       arguments: id,
-    );
+    )
+        .then((result) {
+      if (result != null) {
+        removeItem(result);
+      }
+    });
   }
 
   String get ComplexityText {
